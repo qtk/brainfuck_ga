@@ -2,9 +2,9 @@ import string
 import random
 from datetime import datetime
 from brainfuck import brainfuck
-#random.seed(2411)
+#  random.seed(2411)
 
-bf_syntax = string.digits + '>' + '<' + '+' + '-' + '.' + '[' + ']'  + ','
+bf_syntax = string.digits + '>' + '<' + '+' + '-' + '.' + '[' + ']' + ','
 
 
 def microseconds():
@@ -46,16 +46,17 @@ class Evolution:
         def fitness(dna):
             fitness = 0
             try:
-                for i in range(0, 127):
+                for i in range(1, 13):
+                    target = i * 10
                     result = brainfuck(dna, bfinput=i)
                     try:
                         result.output = int(''.join(map(str, result.output)))
                     except ValueError:
                         result.output = 0
-                    fitness += ((i+i) - result.output) ** 2
+                    fitness += ((target+target) - result.output) ** 2
                 return fitness
             except (ValueError, IndexError):
-                fitness += 1000000000 # one billion
+                fitness += 1000000000  # one billion
                 return fitness
 
         for individual in population:
