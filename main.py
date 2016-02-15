@@ -38,7 +38,7 @@ class Evolution:
         for i in range(pop_size):
             individual = {'fitness': None,
                           'output': None,
-                          'dna': [random.choice(bf_syntax) for _ in range(random.randint(10, 100))]}
+                          'dna': [random.choice(bf_syntax) for _ in range(random.randint(10, 32))]}
             population.append(individual)
         return population
 
@@ -46,7 +46,7 @@ class Evolution:
         def fitness(dna):
             fitness = 0
             try:
-                for i in range(1, 10):
+                for i in range(0, 127):
                     result = brainfuck(dna, bfinput=i)
                     try:
                         result.output = int(''.join(map(str, result.output)))
@@ -55,7 +55,7 @@ class Evolution:
                     fitness += ((i+i) - result.output) ** 2
                 return fitness
             except (ValueError, IndexError):
-                fitness += 5000
+                fitness += 1000000000 # one billion
                 return fitness
 
         for individual in population:
@@ -67,13 +67,13 @@ class Evolution:
         def mutate(child):
             chance = random.random()
             if chance < 0.1:
-                for _ in range(0, random.randint(0, 3)):
+                for _ in range(0, random.randint(1, 4)):
                     child.append(random.choice(bf_syntax))
             elif chance < 0.8:
-                for _ in range(0, random.randint(0, 3)):
+                for _ in range(0, random.randint(1, 4)):
                     child[random.randint(0, len(child) - 1)] = random.choice(bf_syntax)
             else:
-                for _ in range(0, random.randint(0, 3)):
+                for _ in range(0, random.randint(1, 4)):
                     del(child[random.randint(0, len(child) - 1)])
             return child
 
@@ -118,9 +118,9 @@ class Evolution:
             if len(child2) < 10:
                 child2 = child2 + child1
             # prevent bloat
-            if len(child1) > 100:
+            if len(child1) > 32:
                 child1 = child1[:len(child1) // 2]
-            if len(child2) > 10:
+            if len(child2) > 32:
                 child2 = child1[:len(child2) // 2]
 
             child1 = {'fitness': None,
@@ -136,4 +136,4 @@ class Evolution:
 
 
 if __name__ == '__main__':
-    Evolution(pop_size=500)
+    Evolution(pop_size=100)

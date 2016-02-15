@@ -39,10 +39,10 @@ class Syntax:
         Replaces byte at the pointer with input.
         No ctrl-z (ASCII-26), because the user should be able to quit"""
         if self.test:
-            c = sys.stdin.read(1)
-            if c in string.digits:
+            c = input("<")
+            try:
                 c = int(c)
-            else:
+            except Exception as e:
                 c = ord(c)
         else:
             c = bfinput
