@@ -44,6 +44,8 @@ class Evolution:
 
     def set_pop_fitness(self, population):
         def fitness(dna):
+            if dna.count('[') == dna.count(']') + 1:
+                dna.append(']')
             fitness = 0
             try:
                 for i in range(1, 13):
@@ -137,4 +139,4 @@ class Evolution:
 
 
 if __name__ == '__main__':
-    Evolution(pop_size=100)
+    Evolution(pop_size=500)
