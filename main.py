@@ -2,7 +2,7 @@
 import random
 import microseconds as ms
 from brainfuck2 import BrainFuck
-#  random.seed(2411)
+# random.seed(2411)
 
 bf_syntax = '>' + '<' + '+' + '-' + '.' + '[' + ']' + ','
 
