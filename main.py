@@ -1,26 +1,16 @@
-import string
+
 import random
-from datetime import datetime
-from brainfuck import brainfuck
+import microseconds as ms
+from brainfuck2 import BrainFuck
 #  random.seed(2411)
 
-bf_syntax = string.digits + '>' + '<' + '+' + '-' + '.' + '[' + ']' + ','
-
-
-def microseconds():
-    current_time = datetime.now()
-    current_time = current_time.microsecond \
-                   + current_time.second * 1000000 \
-                   + current_time.minute * 1000000 * 60 \
-                   + current_time.hour * 1000000 * 60 * 60 + current_time.day * 1000000 * 60 * 60 * 24
-    return current_time
-
+bf_syntax = '>' + '<' + '+' + '-' + '.' + '[' + ']' + ','
 
 class Evolution:
     def __init__(self, pop_size):
-        self.time = microseconds()
+        self.duration = ms.microseconds()
         self.evolve(pop_size)
-        self.time = microseconds() - self.time
+        self.duration = ms.microseconds() - self.time
         print("duration:", self.time / 1000000, " seconds")
 
     def evolve(self, pop_size):
@@ -44,20 +34,18 @@ class Evolution:
 
     def set_pop_fitness(self, population):
         def fitness(dna):
-            if dna.count('[') == dna.count(']') + 1:
-                dna.append(']')
             fitness = 0
             try:
-                for i in range(1, 13):
-                    target = i * 10
-                    result = brainfuck(dna, bfinput=i)
+                for i in range(1, 10):
+                    target = i + i
+                    result = BrainFuck(code=dna, input_=[i, i])
                     try:
-                        result.output = int(''.join(map(str, result.output)))
+                        result.output = int(result.output[0])
                     except ValueError:
                         result.output = 0
                     fitness += ((target+target) - result.output) ** 2
                 return fitness
-            except (ValueError, IndexError):
+            except IndexError:
                 fitness += 1000000000  # one billion
                 return fitness
 
@@ -139,4 +127,4 @@ class Evolution:
 
 
 if __name__ == '__main__':
-    Evolution(pop_size=500)
+    Evolution(pop_size=100)
