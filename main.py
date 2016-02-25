@@ -6,6 +6,7 @@ from brainfuck2 import BrainFuck
 
 bf_syntax = '>' + '<' + '+' + '-' + '.' + '[' + ']' + ','
 
+
 class Evolution:
     def __init__(self, pop_size):
         self.duration = ms.microseconds()
@@ -36,18 +37,15 @@ class Evolution:
         def fitness(dna):
             fitness = 0
             try:
-                for i in range(1, 10):
-                    target = i + i
-                    result = BrainFuck(code=dna, input_=[i, i])
-                    try:
-                        result.output = int(result.output[0])
-                    except ValueError:
-                        result.output = 0
-                    fitness += ((target+target) - result.output) ** 2
-                return fitness
+                for i in range(1, 120, 10):
+                    target = i * 2
+                    result = BrainFuck(code=dna, input_=[i])
+                    if len(result.output) == 0:
+                        result.output[0] = 0
+                    fitness += (target - result.output[0]) ** 2
             except IndexError:
                 fitness += 1000000000  # one billion
-                return fitness
+            return fitness
 
         for individual in population:
             individual['fitness'] = fitness(individual['dna'])
@@ -78,7 +76,7 @@ class Evolution:
             return child1, child2
 
         def tournament(population):
-            opponent1, opponent2 = population[random.randint(0, pop_size - 1)], population[random.randint(1, pop_size - 1)]
+            opponent1, opponent2 = population[random.randint(0, pop_size - 1)], population[random.randint(0, pop_size - 1)]
             if opponent1['fitness'] < opponent2['fitness']:
                 parent = opponent1
             else:
@@ -96,9 +94,9 @@ class Evolution:
             if len(parent2) < 10:
                 parent2 = parent2 + parent1
 
-            if chance < 0.8:
+            if chance < 0.7:
                 child1, child2 = crossover(parent1, parent2)
-            elif chance < 0.85:
+            elif chance < 0.72:
                 child1, child2 = parent1, parent2
             else:
                 child1, child2 = mutate(parent1), mutate(parent2)
@@ -127,4 +125,4 @@ class Evolution:
 
 
 if __name__ == '__main__':
-    Evolution(pop_size=100)
+    Evolution(pop_size=50)

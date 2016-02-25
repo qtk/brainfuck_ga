@@ -118,8 +118,8 @@ class BrainFuck:
                         nested_loops -= 1
 
 if __name__ == '__main__':
-    testcode = list(",>,<[>+<-]>.")
-    testinput = [65, 255]
+    testcode = list(",++[++.>,+[<")
+    testinput = [1, 4]
     output = BrainFuck(input_=testinput, code=testcode)
     for number in output.output:
         print(int(number))
